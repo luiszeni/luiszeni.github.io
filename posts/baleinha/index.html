@@ -194,6 +194,16 @@
 	<p>E, se tudo der certo, temos acesso a um ambiente Docker como Root =): </p>
 	<img src="001.png">
 
+	<div class="alert">
+		Uma instancia de um container vai sempre existir após a sua instanciação (criação), portanto, não é necessário criar instancias novas toda vez que você desejar usar o docker. Na realidade, se você fizer isso não irás manter os arquivos da instância anterior.
+	</div>
+	<h3>Reiniciando um container criado previamente</h3>
+	<div class="input_area">
+		$ nvidia-docker start -ai <span class="marked">ID INSTANCIA</span>
+	</div>
+
+	Como saber a id da tua instância? ⏬
+
 	<h3>Listando os containers que estão rodando</h3>
 	<div class="input_area">
 		$ nvidia-docker ps 
