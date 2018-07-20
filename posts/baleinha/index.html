@@ -61,11 +61,11 @@
 
 	<h2>Acesso remoto ao servidor</h2>
 
-	<p>Tentarei listar o que acho necessário para se concectar "confortávelmente" em um server Linux remoto usando SSH. É provavel que algumas explicações sejam omitida ou porque eu sou preguiçoso o porque esqueci de fazê-lo. Lembra-te que esta é <i> my way to do </i>. Existem outras formas e você é livre para escolher a que mais achares interessante 😄.
+	<p>Tentarei listar o que acho necessário para se concectar "confortávelmente" em um server Linux remoto usando SSH. Na verdade depois que tu te acostuma a trabalhar com estas ferramentas tu estranha ter que trabalhar "localmente" novamente. Hoje meu notebook não fica mais fervendo, quem sofre esmagando os dados é o servidor. É provavel que algumas explicações sejam omitidas ou (i) porque eu sou preguiçoso; ou (ii) porque esqueci de fazê-lo. 
 
-	Acessar SSH dentro de uma mesma rede usando Linux é trivial e não irei entrar em detalhes para este tipo de acesso. Aqui iremos discutir um contexto um pouco mais complexo em que existe uma máquina de ponto de entrada para a rede (chamaremos de <b>Máquina Proxy</b> aqui). Em resumo, a máquina Proxy permite que computadores de redes externas se conectem de alguma forma à rede interna. Esse tipo de coneção poderia ser acessar algum serviço de intranet, FTP, ou fazer SSH para uma máquina dentro desta rede.
+	Acessar SSH dentro de uma mesma rede usando Linux é trivial e não irei entrar em detalhes para este tipo de acesso. Aqui iremos discutir um contexto um pouco mais complexo em que existe uma máquina de ponto de entrada para a rede (chamaremos de <b>Máquina Proxy</b> aqui). Em resumo, a máquina Proxy permite que computadores de redes externas se conectem de alguma forma à rede interna. Esse tipo de conecção, pode ser, por exemplo, acessar algum serviço de intranet, FTP, ou fazer SSH para uma máquina dentro da rede que não tem acesso externo pelas portas necessárias.
 
-	No nosso caso, queremos acessar o precioso <b>servidor com GPU</b> que está nesta rede e o acesso a ela, se feito fora da rede, tem que passar pela máquina proxy. ""Graficamente queremos fazer o seguinte:</p>
+	No nosso caso, queremos acessar o precioso <b>servidor com GPU</b> a partir de outra rede. O problema é que o  <b>servidor com GPU</b> não tem acesso a porta 22 da rede. portanto, tem que passar pela máquina proxy. "Graficamente queremos fazer o seguinte:</p>
 
 	<img  src="002.png" width="100%">                                                                                                    
 
@@ -87,11 +87,11 @@
 
 	É bom resaltar que não necessariamente o teu usuário vai ser o mesmo na máquina server e na máquina proxy.
 
-	Bacana, temos um túnel. Aquele monte de opções na frente indicam que não é para abrir um terminal bash, criar um túnel e que seja possível renderizar janelas remotamente usando servidor X via SSH.
+	Bacana, temos um túnel. Aquele monte de opções com - na frente indicam que não é para abrir um terminal bash, criar um túnel e que seja possível renderizar janelas remotamente usando servidor X via SSH.
 
 
 	<h3>Acesso ao bash via SSH</h3>
-	Como temos o túnel, basicamente para acessar o terminal da máquina fazemos o seguinte:
+	Como temos o túnel, basicamente para acessar o terminal da (Servidor GPU) fazemos o seguinte:
 	<div class="input_area">
 		ssh -Y -p <span class="marked">[porta no (Meu PC) do túnel]</span> <span class="marked">[usuário no (Server GPU)]</span> @localhost
 	</div>
@@ -105,9 +105,11 @@
 
 	<h3>Facilitando o acesso aos arquivos</h3>
 
-	Quem já sofreu fazendo SCP sabe a chatice que é, SCP vai, SCP vem... Uma solução para isso é utilizar o SSHFS, ou seja, file system over SSH 🤩. Com isso é possível criar uma pasta no (Meu PC)  que replica os arquivos de alguma pasta do (Servidor GPU). Assim podemos enviar e copiar os arquivos de forma mais simples.
+	Quem já sofreu fazendo SCP sabe a chatice que é, SCP vai, SCP vem... Uma solução para isso é utilizar o SSHFS, ou seja, file system over SSH 🤩. Com isso é possível criar uma pasta no (Meu PC)  que replica os arquivos de alguma pasta do (Servidor GPU). Assim podemos enviar e copiar os arquivos de forma mais simples e usando o navegador de arquivos com GUI. 
 
-	Para fazer isso vamos usar o túnel novamente =) 
+	Eu gosto bastante dessa solução pq permite, por exemplo, que eu edite o código no (Server GPU) usando o sublime e posso usar o Finder no OSX para manipular os arquivos/
+
+	Para montar a pasta vamos usar o túnel novamente =) 
 	<div class="input_area">
 		sshfs -p <span class="marked">porta de entrada do túnel</span> -o allow_other <span class="marked">user na máquina desejada</span>@localhost:<span class="marked">path na máquina desejada</span> <span class="marked">onde vai ser montado no teu pc</span>
 	</div>
@@ -132,7 +134,7 @@
 	O Docker é uma ferramenta para empacotar, distribuir e rodar qualquer tipo de aplicação dentro de um container. Um container é independente de hardware e plataforma, então tu não tens mais aquela desculpa de "na minha máquina funciona" hehe. O bacana é que não temos que nos preocupar se o código que estamos criando vai deixar de rodar, por exemplo no server de produção.
 
 
-	No contexto onde se usa GPUs, por exemplo aqui no nosso lab de visão computacional na UFRGS é interessante usar o Docker para isolar os ambientes. Como sabemos uma GPU é cara para burro e ainda bem que a Nvidia doou umas para nós =). Mas o que é isolar o ambiente?  Imagina o seguinte, eu estou usando Cuda 9 com cuDNN 7, Tensor Flow, OpenCV 3.4 e Python 3.  Meu colega do lado, que usa o mesmo server, ta usando Cuda 8, cuDNN 5, Torch, OpenCV 2.4 e Python 2.  Se não isolarmos estes ambientes vai dar caca, ou pior, se eu fizer caquinha no meu ambiente, vai repercutir no ambiente do meu colega. Portanto, o Docker pode ser usado para dar essa segurança de ninguém estragar o ambiente de ninguém quando se compartilha uma máquina. E tu também pode fazer uns testes mais "vida loca" já que qualquer coisa é só subir uma nova imagem. <algum_emoticon_aqui>
+	No contexto onde se usa GPUs para esmagar dados, por exemplo, aqui no nosso lab de visão computacional na UFRGS é interessante usar o Docker para isolar os ambientes e compartilhar hardware (GPUs são caras).  Mas o que é isolar um ambiente?  Imagina o seguinte, eu estou usando Cuda 9 com cuDNN 7, Tensor Flow, OpenCV 3.4 e Python 3.  Meu colega do lado, que usa o mesmo server, ta usando Cuda 8, cuDNN 5, Torch, OpenCV 2.4 e Python 2.  Se não isolarmos estes ambientes vai dar caca, ou pior, se eu fizer caquinha no meu ambiente, vai repercutir no ambiente do meu colega. Portanto, o Docker pode ser usado para dar essa segurança de ninguém estragar o ambiente de ninguém quando se compartilha uma máquina. E tu também pode fazer uns testes mais "vida loca" já que qualquer coisa é só subir uma nova imagem. 
 
 
 	<h3>Uma imagem</h3>
@@ -150,7 +152,7 @@
 	Não sei. :)
 
 	<h3>Como baixar imagens das internets</h3>
-	Uma coisa legal é que existem repositórios de imagens Docker com varios setups já pré configuras. "Ah, tu quer usar Ubuntu 14.4, Cuda 6.0 cuDNN 4. De boas veio ta aqui a imagem, é só dar um pull e usar ai". Exemplo disso é o <a =href="https://hub.docker.com/">Docker Hub</a>.
+	Uma coisa legal é que existem repositórios de imagens Docker com varios setups já pré configuras. "Ah, tu quer usar Ubuntu 14.4, Cuda 6.0 cuDNN 4. De boas veio, ta aqui a imagem, é só dar um pull e usar ai". Exemplo disso é o <a =href="https://hub.docker.com/">Docker Hub</a>.
 
 
 	<h3>Interagindo com o Docker</h3>
@@ -242,8 +244,9 @@
 
 
 
-	<h3>Pessoas que contribuiram com este documento 😃 (agradecimentos):</h3>
-	Thiago Trugillo 
+	<h3>Pessoas que contribuiram com este documento de alguma forma 😃 (agradecimentos):</h3>
+	Thiago Trugillo (Na parte do docker e typos deste documento)
+	Serião (Por me ensinar a montar tunneis e sshfs)
 
 </body>
 </html>
