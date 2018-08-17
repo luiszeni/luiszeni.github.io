@@ -1,34 +1,180 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>Luis Zeni</title>
+  <title>Luis Zeni</title>
+  <meta charset="utf-8">
+  
+  <link rel="stylesheet" href="lib/bootstrap.min.css">
+  <script src="lib/jquery.min.js"></script>
+  <script src="lib/popper.min.js"></script>
+  <script src="lib/bootstrap.min.js"></script>
+  <link href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900,100italic,100,300,300italic,400italic,500italic,900italic,700italic" rel="stylesheet" type="text/css">
+  
+  <style>
+
+  	body {
+		font-family: 'Roboto', sans-serif;
+		font-size: 18px;
+		font-weight: 300;
+		color: #555;
+		padding: 0;
+	}
+
+	.item_post{
+		padding-left: 30px;
+	}
+
+
+	.item_post .p_title, .item_post p {
+		margin: 0px;
+	}
+
+	.about_me{
+		background: #f0f5f5;
+	}
+
+	.about_me .row{
+		padding-top: 20px;
+		padding-bottom: 20px;
+	}
+
+	#img_me{
+		border: 2px solid #999;
+	}
+
+	.item_post dl{
+		padding-top: 0px;
+	}
+
+  </style>
+
 </head>
 <body>
+<!-- About me -->
+<div class="container-fluid about_me">
+	<div class="container">
+		<div class="row ">
+			<div class="col-sm-2">
+				<img id="img_me" src="img/me.png"  class="rounded-circle img-fluid" alt="authors picture">
+			</div>
+			<div class="col-sm-9">
+				<h2>Luis Zeni</h2>
 
-	<h1> Hi strange, welcome to the ugly version of Luis Zeni's website.</h1>
-	<quote> I deeply hope to make a nice CSS with all that super coll effects in javascript. But research come firth, i guess. xD </quote>
+				<p>I am a PhD student in the <a href="http://www.inf.ufrgs.br/ppgc/en/">UFRGS Computer Vision Lab</a>, advised by Professor <a href="http://inf.ufrgs.br/~crjung/">Claudio Jung</a>. I'm interested in machine learning and deep learning, especially applied to computer vision and object detection applications.</p>
+
+				<p> <b>luis.zeni at inf.ufrgs.br</b> - <a href="https://github.com/luiszeni" >GitHub</a> - <a href="https://twitter.com/luis_zeni" >@luis_zeni</a></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Research -->
+<div class="container" style="margin-top:30px">
+	<div class="row">
+		<div class="col-sm-*">
+			<h2>Research</h2>
+			<div class="row item_post">
+				<div class="col-sm-2">
+					<img src="img/gender_sib2018.png" style="width: 100%" class="img-fluid" alt="authors picture">
+				</div>
+
+				<div class="col-sm-10">
+					<h5 class="p_title">Real-Time Gender Detection in the Wild Using Deep Neural Networks</h5> 
+					<p  class="p_authors"><b>Luis Zeni</b>, Claudio Jung</p>
+					<p  class="p_location">SIBGRAPI 2018</p>
+					<p  class="p_description"> </p>
+
+					We trained a real-time gender detector in the wild using DNN and visually analyzed which parts leads our model to make mistakes and the bias introduced by the training data. 
+
+					<p  class="p_resources"> <a href="http//">[Coming soon]</a></p>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 
-	<p> <b>About me</b>  I am LuisZeni and I have super powers.... (<it>cof cof, it is a lie,</it>). The true is that i am  an (more one) pHD student conducting my research on object detection and perception of objects  using Deep Learning @ <a href="http://www.inf.ufrgs.br/ppgc/en/">PPGC</a> @ <a href="http://www.ufrgs.br/ufrgs/inicial"> UFRGS</a> @ <a href="https://en.wikipedia.org/wiki/Brazil">Brazil</a>. I am under supervision of <a href="http://inf.ufrgs.br/~crjung/">Claudio Jung</a></p> 
+<!-- Projects -->
+<div class="container" style="margin-top:30px">
+	<div class="row">
+		<div class="col-sm-*">
+			<h2>Projects</h2>
+			<div class="row item_post">
+				<div class="col-sm-2">
+					<a href="http://luiszeni.com.br/python_classes/">
+						<img src="img/python.png" style="width: 100%" class="img-fluid" alt="authors picture">
+					</a>
+				</div>
 
-	<p>I started my phD this year and have nothing interesting to present yet =(  But near ( I HOPE) it will change!</p>
+				<div class="col-sm-10">
+					<h5 class="p_title">Learning to program in python (Aprendendo a programar em python)</h5> 
+					<p  class="p_description">EN: This "book" is a series of chapters to help students to learn to program in python (this content is in Portuguese language)</p>
+					<p  class="p_description">PT: Este livro contempla uma série de capítulos para ajudar estudantes a aprenderem a programar em python</p>
 
-	<p> Sometimes I ask myself if I chose the right path, but man, common, computer vision and deep learning are so cool and amazing!!!  And I love to work with my folks in the LAB =)</p>
+					<p> <a href="http://luiszeni.com.br/python_classes/">[Ir para o livro]</a></p> 
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
-	<p> <b> I ACCEPT FREE GPUS!!!! =D </b> <b> I ACCEPT FREE GPUS!!!! =D </b> <b> I ACCEPT FREE GPUS!!!! =D </b> //END OF JOKE</p>
+<!-- Teaching -->
+<div class="container" style="margin-top:30px">
+	<div class="row">
+		<div class="col-sm-*">
+			<h2>Teaching</h2>
+			<div class="row item_post">
+				<div class="col-sm-*">
+					<h5 class="p_title">Centro Universitário Ritter dos Reis (2015-2017)</h5> 
+					<p>I taught the following courses in the computer science department: </p>
+					<div style="margin-left:30px">
+						<p>Web Development</p>
+						<p>Algorithms and Programming</p>
+						<p>Data Structures</p>
+						<p>Mobile Development (Android)</p>
+					</div>
+				</div>
+			</div>
+			<div class="row item_post">
+				<div class="col-sm-*">
+					<h5 class="p_title">Instituto Federal do Rio Grande do Sul (2014)</h5> 
+					<p>I teach the following courses in the technical informatics course: </p>
+					<div style="margin-left:30px">
+						<p>Algorithms and Programming</p>
+						<p>Mobile Development (Android)</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
-	<hr>
-	<h2>Menu to other stuff (Almost nothing):</h2>
-	<ul>
-		<li><strike>Publications</strike> ☠️</li>
-		<li><strike>Blog</strike> 🤯</li>
-		<li><a href="https://github.com/luiszeni" >GitHub</a></li>
-		<li><a href="http://luiszeni.com.br/python_classes/">Livro Aprenda python [alpha-beta-mto-a-melhorar] [portuguese]</a></li>
-	</ul>
+<!-- About me -->
+<div class="container" style="margin-top:30px">
+	<div class="row">
+		<div class="col-sm-*">
+			<h2>Industry</h2>
+			<div class="row item_post">
+				<div class="col-sm-2">
+					<img src="img/sivem_mobile.jpg" style="width: 100%" class="img-fluid" alt="authors picture">
 
+					<p style="font-size: 70%">*Image Credits: <a href="www.compuletra.com.br">Compuletra</a></p>
+				</div>
+				<div class="col-sm-10">
+					<h5 class="p_title">Near real-time car plate detector App (2015)</h5> 
+					<p  class="p_location">Compuletra</p>
+					<p  class="p_description"> I helped in the development of an Android App that uses computer vision to detect car plates and use this information to seek for stolen cars. </p>
 
-<pre>contact-me at:   lfazeni [\that stuff that separates domain and the user\] inf.ufrgs.br =) 
-   or twitter:  @luis_zeni</pre>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer class="container-fluid text-center" style="margin-top: 30px">
+  <p></p>
+</footer>
 
 </body>
 </html>
