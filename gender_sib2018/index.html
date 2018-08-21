@@ -1,1 +1,202 @@
-UNder construction =)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Gender Detection in the Wild</title>
+  <meta charset="utf-8">
+  
+  <link rel="stylesheet" href="../lib/bootstrap.min.css">
+  <script src="../lib/jquery.min.js"></script>
+  <script src="../lib/popper.min.js"></script>
+  <script src="../lib/bootstrap.min.js"></script>
+  <link href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900,100italic,100,300,300italic,400italic,500italic,900italic,700italic" rel="stylesheet" type="text/css">
+  
+  <style>
+
+  	body {
+		font-family: 'Roboto', sans-serif;
+		font-size: 18px;
+		font-weight: 300;
+		color: #555;
+		padding: 0;
+	}
+
+	.item_post{
+		padding-left: 30px;
+	}
+
+
+	.item_post .p_title, .item_post p {
+		margin: 0px;
+	}
+
+	.about_me{
+		background: #f0f5f5;
+	}
+
+	.about_me .row{
+		padding-top: 20px;
+		padding-bottom: 20px;
+	}
+
+	#img_me{
+		border: 2px solid #999;
+	}
+
+	.item_post dl{
+		padding-top: 0px;
+	}
+
+  </style>
+
+</head>
+<body>
+<!-- About me -->
+<div class="container-fluid about_me">
+	<div class="container">
+		<div class="row ">
+			<div class="col-sm-*">
+				<h2>Real-Time Gender Detection in the Wild Using Deep Neural Networks</h2>
+
+				<p style="text-align: justify;text-justify: inter-word"><b>Abstract:</b> Gender recognition can be used in many applica- tions, such as video surveillance, human-computer interaction and customized advertisement. Current state-of-the-art gender recognition methods are detector-dependent or region-dependent, focusing mostly on facial features (a face detector is typically required). These limitations do not allow an end-to-end training pipeline, and many features used in the detection phase must be re-learned in the classification step. Furthermore, the use of facial features limits the application of such methods in the wild, where the face might not be present. This paper presents a real-time end-to-end gender detector based on deep neural networks. The proposed method detects and recognizes the gender of persons in the wild, meaning in images with a high variability in pose, illumination an occlusions. To train and evaluate the results a new annotation set of Pascal VOC 2007 and CelebA were created. Our experimental results indicate that combining both datasets during training can increase the mAp of our gender detector. We also visually analyze which parts leads our network to make mistakes and the bias introduced by the training data.</p>
+
+				<p><b>Authors:</b> <a href="http://luiszeni.com.br" >Luis Felipe Zeni</a> and <a href="http://inf.ufrgs.br/~crjung/" >Claudio Jung</a></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Demos -->
+<div class="container" style="margin-top:10px">
+	<h2>Video Demos</h2>
+	<div class="row">
+		<div class="col-sm-4">
+			
+			<iframe  width="100%" height="200" src="https://www.youtube.com/embed/fIBuTIO9s3I?rel=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>	
+			<p style="text-align: justify;text-justify: inter-word">Real-time scren capture demo using an webcam and Nvidia GTX 1080.</p>
+		</div>
+		<div class="col-sm-4">
+			<iframe  width="100%" height="200" src="https://www.youtube.com/embed/UYyxTpJhZEs?rel=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>	
+			<p style="text-align: justify;text-justify: inter-word">Proposed method processing a crowded video.</p>
+		</div>
+		<div class="col-sm-4">
+			<iframe  width="100%" height="200" src="https://www.youtube.com/embed/_jlBAMx-8V0?rel=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>	
+			<p style="text-align: justify;text-justify: inter-word">Another video processing with a lot of occlusions, poses and illumination changes.</p>
+		</div>
+	</div>
+</div>
+
+<!-- Code and Data -->
+<div class="container" style="margin-top:0px">
+	
+	<div class="row">
+		<div class="col-sm-*">
+			<h2>Code and Data</h2>
+		</div>
+	</div>
+<!-- Paper -->
+	<div class="row item_post">
+		<div class="col-sm-*">		
+			<p> <b class="p_title">Paper: </b> You can download the full paper <a href="http://">[ here ]</a></p>
+			<div style="margin-left:30px">
+				<p> If you use our code or our dataset annotations in an academic work cite the following paper: </p>
+				<div class="card">
+<pre class="card-body">
+@INPROCEEDINGS{zeni2018a,
+	author={L. F. Zeni and C. R. Jung}, 
+	booktitle={31st Conference on Graphics, Patterns and Images (SIBGRAPI 2018)}, 
+	title={Real-Time Gender Detection in the Wild Using Deep Neural Networks}, 
+	year={2018}, 
+	pages={}, 
+	keywords={gender detection, deep learning, visualization}, 
+	doi={}, 
+	month={Oct},}
+</pre>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!-- Annotations -->
+	<div class="row item_post" style="margin-top:20px">
+		<div class="col-sm-*">
+			<p> <b class="p_title">Annotations: </b> In this work we adapted the <a href="">Pascal VOC 2007</a> and <a href="">CelebA</a> datasets to the task of gender detection in the wild. </p>
+			<div style="margin-left:30px">
+				<p>Instructions on how to set up both datasets to train a network: <a href="http://">[ here ]</a></p>
+				<p>Download the annotations to Pascal VOC 2007: <a href="http://">[ here ]</a></p>
+				<p>Download the annotations to CelebA: <a href="http://">[ here ]</a></p>
+			</div>
+		</div>
+	</div>
+
+<!-- Source Code -->
+	<div class="row item_post" style="margin-top:20px">
+		<div class="col-sm-*">
+			<p> <b class="p_title">Source Code: </b> This work source code is available on the following github repository <a href="http://">[ here ]</a> </p>
+			<div style="margin-left:30px">
+	
+					Instructions on how to set up and use our code are available on the repository <a href="http://">[ README ]</a>
+			
+			</div>
+		</div>
+	</div>
+
+<!-- docker -->
+	<div class="row item_post" style="margin-top:20px">
+		<div class="col-sm-*">
+			<p> <b class="p_title">Docker: </b> If you just want to test our models without lots of work configuring libs and stuff we made available an nvidia-docker with everything set up at docker hub. </p>
+			<div style="margin-left:30px">
+				<p> Link to the docker images <a href="http://">[ here ]</a></p>
+				<p> Instructions of usage <a href="http://">[ here ]</a></p>
+			</div>
+		</div>
+	</div>
+<!-- Pre trained models -->
+	<div class="row item_post" style="margin-top:20px">
+		<div class="col-sm-*">
+			<p> <b class="p_title">Pre-trained models: </b> You can download our pre-trained models to run on darknet or tensorflow.</p>
+			<div style="margin-left:30px">
+				<p> 50% VOC2007 - 50% CelebA Darknet Model <a href="http://">[ download here ]</a></p>
+				<p> 50% VOC2007 - 50% CelebA TensorFlow Model <a href="http://">[ download here ]</a></p>
+			</div>
+		</div>
+	</div>	
+
+</div>
+
+<div class="container" style="margin-top:10px">
+	
+	<div class="row">
+		<div class="col-sm-*">
+			<h2>Contact</h2>
+		</div>
+	</div>
+	<div class="row item_post" style="margin-top:0px">
+		<div class="col-sm-*">
+			<p>If you need more information, please feel free to contact me through the following e-mail:</p>
+			<p> <b>luis [dot] zeni [at] inf [dot] ufrgs [dot] br </b></p>
+		</div>
+	</div>
+</div>
+
+<div class="container" style="margin-top:10px">
+	<div class="row">
+		<div class="col-sm-*">
+			<h2>Acknowledgment</h2>
+		</div>
+	</div>
+	<div class="row item_post" style="margin-top:0px">
+		<div class="col-sm-*">
+			<p>We would like to thank the Brazilian funding agencies CAPES and CNPq. As well as NVIDIA Corporation for the donation of the Titan Xp Pascal GPU used for this research.</p>
+		</div>
+	</div>
+</div>
+
+<footer class="container-fluid text-center about_me" style="margin-top: 30px">
+  	<div class="row" style="height: 100px">
+
+  	</div>
+</footer>
+
+</body>
+</html>
