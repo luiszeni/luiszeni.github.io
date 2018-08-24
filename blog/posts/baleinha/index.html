@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Baleia à cerveja</title>
+	<style type="text/css">
+    
+	li{
+		margin-bottom: 10px;
+	}
+
+	body {
+		margin: 30px;
+		padding: 15px;
+		background-color: #fff;
+		min-height: 0;
+		-webkit-box-shadow: 0px 0px 12px 1px rgba(87, 87, 87, 0.2);
+		box-shadow: 0px 0px 12px 1px rgba(87, 87, 87, 0.2);
+	}
+
+
+	.alert{
+		padding: 15px;
+		margin-bottom: 18px;
+		border: 1px solid transparent;
+		border-radius: 2px;
+		background: lightyellow;
+		color: red;
+	}
+
+
+	.marked{
+		text-decoration: underline;
+	}
+
+	.input_area {
+		border: 1px solid #cfcfcf;
+		border-radius: 2px;
+		background: #f7f7f7;
+		line-height: 1.21429em;
+		padding: 10px;
+		margin-bottom: 10px;
+		margin-top: 10px;
+	}
+
+	</style>
+</head>
+<body>
+
+	<h1> Acesso remoto à um servidor Linux com suporte a GPU e Docker</h1>
+
+	Contribuições são bem-vindas. Sugira melhorias, typos, me de bitcoins!
+
+	Este tutorial é uma <u>tentativa</u> de registrar as coisas (comandos, artimanhas e mutretas) mais "básicas" para acessar remotamente um servidor Linux que tenha suporte a GPU e Docker. Observe que eu não vou entrar em detalhes  de como instalar e configurar tal ambiente.
+
+	O Tutorial está separado em duas seções:
+	<ol>
+		<li>Como fazer o acesso remoto com tunnelamento e montar uma pasta para acessar os arquivos no server</li>
+		<li>Como usar o Docker em conjunto com a GPU</li>
+	</ol>
+
+
+	<h2>Acesso remoto ao servidor</h2>
+
+	<p>Tentarei listar o que acho necessário para se concectar "confortávelmente" em um server Linux remoto usando SSH. Na verdade depois que tu te acostuma a trabalhar com estas ferramentas tu estranha ter que trabalhar "localmente" novamente. Hoje meu notebook não fica mais fervendo, quem sofre esmagando os dados é o servidor. É provavel que algumas explicações sejam omitidas ou (i) porque eu sou preguiçoso; ou (ii) porque esqueci de fazê-lo. 
+
+	Acessar SSH dentro de uma mesma rede usando Linux é trivial e não irei entrar em detalhes para este tipo de acesso. Aqui iremos discutir um contexto um pouco mais complexo em que existe uma máquina de ponto de entrada para a rede (chamaremos de <b>Máquina Proxy</b> aqui). Em resumo, a máquina Proxy permite que computadores de redes externas se conectem de alguma forma à rede interna. Esse tipo de conecção, pode ser, por exemplo, acessar algum serviço de intranet, FTP, ou fazer SSH para uma máquina dentro da rede que não tem acesso externo pelas portas necessárias.
+
+	No nosso caso, queremos acessar o precioso <b>servidor com GPU</b> a partir de outra rede. O problema é que o  <b>servidor com GPU</b> não tem acesso a porta 22 da rede. portanto, tem que passar pela máquina proxy. "Graficamente queremos fazer o seguinte:</p>
+
+	<img  src="002.png" width="100%">                                                                                                    
+
+
+	<h3>Criando um túnel</h3>
+	Uma funcionalidade útil do SSH é que ele permite criar túneis. Neste caso, vamos criar um túnel de uma porta do (Meu PC) para uma porta no (Servidor GPU), e claro, isso é possível graças a (Máquina Proxy).
+
+	Para abrir um túnel usamos o seguinte arranjo de comandos com o SSH:
+
+	<div class="input_area">
+		$ ssh -f -N -X -L <span class="marked">[porta no (Meu PC)]</span>:<span class="marked">[ip ou nome do (Servidor GPU) na rede interna]</span>:<span class="marked">[porta destino no (Server GPU)]</span> <span class="marked">[teu usuario na (Máquina Proxy)]</span>@<span class="marked">[Endereço da (Máquina Proxy)]</span>
+	</div>
+	Exemplo concreto:
+	<div class="input_area">
+		$ ssh -f -N -X -L 5005:server_gpu:22 fulano@portal.inf.ufrgs.br
+	</div>
+
+	Basicamente estamos dizendo para o SSH:  monta um túnel a partir da porta 5005 da minha máquina local para a porta 22 (SSH) da máquina server_gpu. Tu vais ter que passar pela máquina portal.inf.ufrgs.br (Máquina proxy) usando o usuário fulano.
+
+	É bom resaltar que não necessariamente o teu usuário vai ser o mesmo na máquina server e na máquina proxy.
+
+	Bacana, temos um túnel. Aquele monte de opções com - na frente indicam que não é para abrir um terminal bash, criar um túnel e que seja possível renderizar janelas remotamente usando servidor X via SSH.
+
+
+	<h3>Acesso ao bash via SSH</h3>
+	Como temos o túnel, basicamente para acessar o terminal da (Servidor GPU) fazemos o seguinte:
+	<div class="input_area">
+		ssh -Y -p <span class="marked">[porta no (Meu PC) do túnel]</span> <span class="marked">[usuário no (Server GPU)]</span> @localhost
+	</div>
+	Exemplo concreto:
+	<div class="input_area">
+		ssh -Y -p 5005 aninha@localhost
+	</div>
+
+	Lindo, 😭, conseguimos conectar pela porta 5005 do (Meu PC) lá no (Servidor GPU) via SSH  através da máquina Proxy.
+
+
+	<h3>Facilitando o acesso aos arquivos</h3>
+
+	Quem já sofreu fazendo SCP sabe a chatice que é, SCP vai, SCP vem... Uma solução para isso é utilizar o SSHFS, ou seja, file system over SSH 🤩. Com isso é possível criar uma pasta no (Meu PC)  que replica os arquivos de alguma pasta do (Servidor GPU). Assim podemos enviar e copiar os arquivos de forma mais simples e usando o navegador de arquivos com GUI. 
+
+	Eu gosto bastante dessa solução pq permite, por exemplo, que eu edite o código no (Server GPU) usando o sublime e posso usar o Finder no OSX para manipular os arquivos/
+
+	Para montar a pasta vamos usar o túnel novamente =) 
+	<div class="input_area">
+		sshfs -p <span class="marked">porta de entrada do túnel</span> -o allow_other <span class="marked">user na máquina desejada</span>@localhost:<span class="marked">path na máquina desejada</span> <span class="marked">onde vai ser montado no teu pc</span>
+	</div>
+	Exemplo concreto:
+	<div class="input_area">
+		sshfs -p 5005 -o allow_other joao@localhost:/home/joao /home/joao/server_gpu
+	</div>
+	<p>
+	E se tudo der certo, no (Teu PC) agora deve ter uma pasta com os arquivos lá do (Servidor GPU)
+
+	Exemplo (montado no OSX): </p>
+
+	<img  src="003.png" width="40%">
+
+	<p>B R U X A R I A</p>
+
+	Se tu fores usar as 3 etapas, eu sugiro rodar na ordem: túnel, SSHFS, SSH.  Na real, faz um .sh por favor! 😉
+
+
+	<h2>Utilizando Docker com GPUs Nvidia</h2>
+
+	O Docker é uma ferramenta para empacotar, distribuir e rodar qualquer tipo de aplicação dentro de um container. Um container é independente de hardware e plataforma, então tu não tens mais aquela desculpa de "na minha máquina funciona" hehe. O bacana é que não temos que nos preocupar se o código que estamos criando vai deixar de rodar, por exemplo no server de produção.
+
+
+	No contexto onde se usa GPUs para esmagar dados, por exemplo, aqui no nosso lab de visão computacional na UFRGS é interessante usar o Docker para isolar os ambientes e compartilhar hardware (GPUs são caras).  Mas o que é isolar um ambiente?  Imagina o seguinte, eu estou usando Cuda 9 com cuDNN 7, Tensor Flow, OpenCV 3.4 e Python 3.  Meu colega do lado, que usa o mesmo server, ta usando Cuda 8, cuDNN 5, Torch, OpenCV 2.4 e Python 2.  Se não isolarmos estes ambientes vai dar caca, ou pior, se eu fizer caquinha no meu ambiente, vai repercutir no ambiente do meu colega. Portanto, o Docker pode ser usado para dar essa segurança de ninguém estragar o ambiente de ninguém quando se compartilha uma máquina. E tu também pode fazer uns testes mais "vida loca" já que qualquer coisa é só subir uma nova imagem. 
+
+
+	<h3>Uma imagem</h3>
+	<img src="ibagens.jpg">
+
+	<p>Uma imagem no Docker é como se fosse um template para uma máquina, que vai ter as libs que tu precisa, os programas, as configurações e etc.  O interessante é que uma vez que se tem a imagem da máquina você pode criar um container dela em qualquer lugar, e esse container vai sempre reproduzir a imagem que deu origem a ele =)</p>  
+
+
+	<h3>Container</h3>
+
+	Eu não sei explicar isso direito, mas minha melhor interpretação é que um container é uma instância de uma imagem Docker que pode, ou não estar rodando atualmente.
+
+
+	<h3>Como eu crio minha própria imagem Docker?</h3>
+	Não sei. :)
+
+	<h3>Como baixar imagens das internets</h3>
+	Uma coisa legal é que existem repositórios de imagens Docker com varios setups já pré configuras. "Ah, tu quer usar Ubuntu 14.4, Cuda 6.0 cuDNN 4. De boas veio, ta aqui a imagem, é só dar um pull e usar ai". Exemplo disso é o <a =href="https://hub.docker.com/">Docker Hub</a>.
+
+
+	<h3>Interagindo com o Docker</h3>
+
+	Sempre vamos interagir com o o Docker e suas imagens, containers e etc. usando o comando "docker"  🤪🤪. Entretanto, para termos suporte ao hardware da NVIDA temos que usar o nvidia-docker (versão Docker da Nvidia que deixa usar a GPU dentro de um container). (Sugiro  que tu crie um alias para o nvidia-docker no teu .bashrc. Eu, ao menos, acho um saco ficar escrevendo essa coisa toda hora 😑).
+
+	<h3>Listando as imagens já instaladas no Docker do servidor</h3>
+
+	<i>nvidia-docker images</i>
+
+	A saída vai ser algo assim:
+	<pre>
+	REPOSITORY          TAG                            IMAGE ID            CREATED             SIZE
+	nvidia/Cuda         9.2-cuDNN7-devel-Ubuntu18.04   4eb54819036b        2 weeks ago         2.92GB
+	nvidia/Cuda         latest                         e2728e6295c6        2 weeks ago         1.96GB
+	Ubuntu              latest                         113a43faa138        6 weeks ago         81.2MB
+	</pre>
+
+	Como podemos ver, temos uma imagem que é só Ubuntu, outra que  é com Cuda basicão (nao lembro bem as specs)  e temos  uma imagem que é bem explicita Cuda 9.2 cuDNN7 para developers  montada no ambiente do Ubuntu 18.04.  (🤟🏼)
+
+
+	<h3>Iniciando um container a partir de uma imagem</h3>
+
+	Para inicializar um container a partir de uma imagem é muito tranquilo:
+
+	<div class="input_area">
+		nvidia-docker run --name <span class="marked">nome da instancia</span> -it <span class="marked">IMAGE ID</span> bash
+	</div>
+	Exemplo concreto:
+	<div class="input_area">
+		nvidia-docker run --name truggilin_das_wavelets -it 4eb54819036b
+	</div>
+
+	<div class="alert">
+		SEMPRE INSTACIE UM CONTAINER USANDO o --NAME E DANDO UM NOME QUE FAÇA SENTIDO! 
+		Como várias pessoas podem estar usando a mesma máquina, pode virar uma bagunça e ninguém mais sabe de quem é o container tal...
+
+		Minha politica como ADM do server: Container mal identificado e não acessado a mais de 7 dias é assassinado. 🔪⚰️
+	</div>
+
+	<p>E, se tudo der certo, temos acesso a um ambiente Docker como Root =): </p>
+	<img src="001.png">
+
+	<div class="alert">
+		Uma instancia de um container vai sempre existir após a sua instanciação (criação), portanto, não é necessário criar instancias novas toda vez que você desejar usar o docker. Na realidade, se você fizer isso não irás manter os arquivos da instância anterior.
+	</div>
+	<h3>Reiniciando um container criado previamente</h3>
+	<div class="input_area">
+		$ nvidia-docker start -ai <span class="marked">ID INSTANCIA</span>
+	</div>
+
+	Como saber a id da tua instância? ⏬
+
+	<h3>Listando os containers que estão rodando</h3>
+	<div class="input_area">
+		$ nvidia-docker ps 
+	</div>
+	Exemplo dos containers rodando:
+	<img src="004.png" width="100%">
+
+	<h3>Listando todos  os containers que existem</h3>
+	<div class="input_area">
+		$ nvidia-docker ps -a
+	</div>
+	Exemplo de todos os containers existentes:
+	<img src="005.png" width="100%">
+
+
+
+	<h2>Repositorizando imagens docker (pull & push)</h2>
+
+	<p>Uma das partes mais amazing fucking great do docker é poder enviar ou baixar imagens de um repositório. Para fazer isso temos que dar um pull (baixar) ou push (enviar). Para não esquecer quem é quem é so pensar que vc tem uma porta na sua frete 😅.</p>
+	<img src="pullpush.jpeg" width="200px">
+	
+
+	<h3>Dando pull de uma imagem de um repositório</h3>
+	Você pode fazer o download de uma imagem contendo as features desejadas em diversos repositórios, como por exemplo o <a =href="https://hub.docker.com/">Docker Hub</a>.
+	
+	Um exemplo real: suponha que se quer uma imagem com CUDA + cuDNN v5 + Torch 7 em ambiente Linux (neste caso Ubuntu 14.04). Após pesquisar no Docker Hub, encontramos este link: <a href="https://hub.docker.com/r/kaixhin/cuda-torch-mega/">https://hub.docker.com/r/kaixhin/cuda-torch-mega/</a>.
+	
+	Para dar um pull e instalar essa imagem na máquina desejada, digita-se:
+	
+	<div class="input_area">
+		$ docker pull kaixhin/cuda-torch-mega
+	</div>
+	
+	Uma coisa legal do Docker Hub é que, além de centralizar toda tipo de imagens, ainda há espaço para o fornecedor descrever e explicar o funcionamento do ambiente em questão.
+	O comando de docker pull, como o do exemplo acima, é sempre fornecido nessas páginas.
+
+
+	<h3>Dando push de uma imagem para o docker hub</h3>
+	
+	Para enviarmos um container que criammos para  o docker hub primeiro precisamos transformar ele em uma imagem. Para fazer isso é só usar o seguinte comando: 
+
+	Comandinho para gerar uma imagem de um container:
+	<div class="input_area">
+		$ nvidia-docker commit -m "descricao da img" -a "autor da imagem" ID_CONTAINER repositorio/nome_img:TAG
+	</div>
+
+	Se tudo der certo sua imagem deve estar visivel nas  "docker images". Agora podemos fazer o push para o docker hub.
+
+	Comandinhos:
+	<div class="input_area">
+		# loga no dockerhub com teu user/senha
+		docker login
+		
+		# prepara a imagem para enviar (eu acho)
+		docker tag repositorio/nome_img:TAG {user do dockerhub}/nome_img
+
+		#pushhhhhhaaaaaa
+		docker push {user do dockerhub}/nome_img
+	</div>
+	
+
+	<h2>Removendo coisas do docker</h2>
+	Tenha cuidado pequeno padawa!
+	<h3>Removendo um Container</h3>
+	
+	<div class="input_area">
+		$ nvidia-docker rm ID_CONTAINER
+	</div>
+
+	<h3>Removendo uma Imagem</h3>
+	
+	<div class="input_area">
+		$ nvidia-docker rmi ID_IMAGEM
+	</div>
+
+	<h2>Pessoas que contribuiram com este documento de alguma forma 😃 (agradecimentos):</h2>
+	Thiago Trugillo (Na parte do docker e typos deste documento)
+	Serião (Por me ensinar a montar tunneis e sshfs)
+
+</body>
+</html>
