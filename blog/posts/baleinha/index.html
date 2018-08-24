@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-124421878-1"></script>
+	<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'UA-124421878-1');
+	</script>
+
+
+	<link rel="stylesheet" href="../../../lib/bootstrap.min.css">
+	<script src="../../../lib/jquery.min.js"></script>
+	<script src="../../../lib/popper.min.js"></script>
+	<script src="../../../lib/bootstrap.min.js"></script>
+	<link href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900,100italic,100,300,300italic,400italic,500italic,900italic,700italic" rel="stylesheet" type="text/css">
+	<meta charset="utf-8">
+
 	<title>Baleia à cerveja</title>
 	<style type="text/css">
     
@@ -50,7 +66,16 @@
 
 	Contribuições são bem-vindas. Sugira melhorias, typos, me de bitcoins!
 
-	Este tutorial é uma <u>tentativa</u> de registrar as coisas (comandos, artimanhas e mutretas) mais "básicas" para acessar remotamente um servidor Linux que tenha suporte a GPU e Docker. Observe que eu não vou entrar em detalhes  de como instalar e configurar tal ambiente.
+	<p>Este tutorial é uma <u>tentativa</u> de registrar as coisas (comandos, artimanhas e mutretas) mais "básicas" para acessar remotamente um servidor Linux que tenha suporte a GPU e Docker. Observe que eu não vou entrar em detalhes  de como instalar e configurar tal ambiente.</p>
+
+	<div class="card">
+		<div class="card-body">
+			<h5 class="p_title">Alguns tutoriais interessantes de como instalar/configurar:</h5>
+			<p><a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04">Instalando Docker no ubuntu 18.4 </a></p>
+			<p><a href="https://github.com/NVIDIA/nvidia-docker">Instalando o nvidia-docker2</a></p>
+		</div>
+	</div>
+
 
 	O Tutorial está separado em duas seções:
 	<ol>
@@ -256,15 +281,17 @@
 
 	Comandinhos:
 	<div class="input_area">
-		# loga no dockerhub com teu user/senha
-		docker login
-		
-		# prepara a imagem para enviar (eu acho)
-		docker tag repositorio/nome_img:TAG {user do dockerhub}/nome_img
-
-		#pushhhhhhaaaaaa
+		# loga no dockerhub com teu user/senha<br>
+		docker login<br>
+		<br>
+		# prepara a imagem para enviar (eu acho)<br>
+		docker tag repositorio/nome_img:TAG {user do dockerhub}/nome_img<br>
+		<br>
+		#pushhhhhhaaaaaa<br>
 		docker push {user do dockerhub}/nome_img
 	</div>
+
+
 	
 
 	<h2>Removendo coisas do docker</h2>
