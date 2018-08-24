@@ -183,7 +183,7 @@
 	</div>
 	Exemplo concreto:
 	<div class="input_area">
-		nvidia-docker run --name máquina_zeni_experimento_detecta_uncleJ -it 4eb54819036b
+		nvidia-docker run --name truggilin_das_wavelets -it 4eb54819036b
 	</div>
 
 	<div class="alert">
@@ -221,6 +221,13 @@
 	<img src="005.png" width="100%">
 
 
+
+	<h2>Repositorizando imagens docker (pull & push)</h2>
+
+	<p>Uma das partes mais amazing fucking great do docker é poder enviar ou baixar imagens de um repositório. Para fazer isso temos que dar um pull (baixar) ou push (enviar). Para não esquecer quem é quem é so pensar que vc tem uma porta na sua frete 😅.</p>
+	<img src="pullpush.jpeg" width="200px">
+	
+
 	<h3>Dando pull de uma imagem de um repositório</h3>
 	Você pode fazer o download de uma imagem contendo as features desejadas em diversos repositórios, como por exemplo o <a =href="https://hub.docker.com/">Docker Hub</a>.
 	
@@ -232,19 +239,49 @@
 		$ docker pull kaixhin/cuda-torch-mega
 	</div>
 	
-	Uma coisa legal do Docker Hub é que, além de centralizar toda sorte de imagens, ainda há espaço para o fornecedor descrever e explicar o funcionamento do ambiente em questão.
+	Uma coisa legal do Docker Hub é que, além de centralizar toda tipo de imagens, ainda há espaço para o fornecedor descrever e explicar o funcionamento do ambiente em questão.
 	O comando de docker pull, como o do exemplo acima, é sempre fornecido nessas páginas.
 
+
+	<h3>Dando push de uma imagem para o docker hub</h3>
+	
+	Para enviarmos um container que criammos para  o docker hub primeiro precisamos transformar ele em uma imagem. Para fazer isso é só usar o seguinte comando: 
+
+	Comandinho para gerar uma imagem de um container:
+	<div class="input_area">
+		$ nvidia-docker commit -m "descricao da img" -a "autor da imagem" ID_CONTAINER repositorio/nome_img:TAG
+	</div>
+
+	Se tudo der certo sua imagem deve estar visivel nas  "docker images". Agora podemos fazer o push para o docker hub.
+
+	Comandinhos:
+	<div class="input_area">
+		# loga no dockerhub com teu user/senha
+		docker login
+		
+		# prepara a imagem para enviar (eu acho)
+		docker tag repositorio/nome_img:TAG {user do dockerhub}/nome_img
+
+		#pushhhhhhaaaaaa
+		docker push {user do dockerhub}/nome_img
+	</div>
+	
+
+	<h2>Removendo coisas do docker</h2>
+	Tenha cuidado pequeno padawa!
 	<h3>Removendo um Container</h3>
 	
-	Tenha cuidado!
 	<div class="input_area">
 		$ nvidia-docker rm ID_CONTAINER
 	</div>
 
+	<h3>Removendo uma Imagem</h3>
+	
+	<div class="input_area">
+		$ nvidia-docker rmi ID_IMAGEM
+	</div>
 
-
-	<h3>Pessoas que contribuiram com este documento de alguma forma 😃 (agradecimentos):</h3>
+	<h2>Pessoas que contribuiram com este documento de alguma forma 😃 (agradecimentos):</h2>
 	Thiago Trugillo (Na parte do docker e typos deste documento)
 	Serião (Por me ensinar a montar tunneis e sshfs)
 
